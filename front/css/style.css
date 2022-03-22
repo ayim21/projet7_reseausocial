@@ -1,0 +1,523 @@
+html { font-size: 62.5%; }
+
+* { box-sizing: border-box; }
+
+body {
+    font-size: 1.3rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: black;
+    color: rgb(9, 31, 69);
+}
+
+a {
+    text-decoration: none;
+    color: rgb(9, 31, 69);
+}
+
+ul {
+    display: flex;
+    flex-direction: row;
+}
+
+ul li {
+    list-style-type: none;
+    padding: 1rem;
+    cursor: pointer;
+    font-size: 1.3rem;
+    color:black;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+ul li:hover {
+    transform: scale(1.1);
+}
+
+ul li a {
+    text-decoration: none;
+    color: white;
+}
+
+img {
+    max-width: 100%;
+    object-fit: cover;
+    width: 20rem;
+    height: 5rem;
+    padding-left: 1rem;
+}
+
+#app {
+    background-color:rgba(240, 240, 240, .7);
+    padding: .1rem;
+}
+
+.container {
+    max-width: 100rem;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem auto;
+    padding: .1rem;
+    text-align: center;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem 1rem;
+    background-color: rgb(206, 82, 90);
+    color: white;
+    box-shadow: rgba(33, 35, 38, 0.5) 0px 10px 10px -10px;
+}
+
+header img:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+main { margin: 1rem 0; }
+
+.button {
+    font-weight: bold;
+    background-color: rgb(212, 212, 212);
+    color: rgb(9, 31, 69);
+    border-style: none;
+    border-radius: .5rem;
+    padding: 1rem 3rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: .2rem 0;
+}
+
+.button:hover {
+    border: .15rem solid rgb(9, 31, 69);
+    color:rgb(206, 82, 90);
+    cursor: pointer;
+}
+
+/************************* LOGIN PAGE *************************/
+
+.container_login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 3.5% 10%;
+    padding: 3rem 0;
+    border-radius: 1.5rem;
+    text-align: center;
+}
+
+.container_login img {
+    object-fit: cover;
+    width: 45rem;
+    height: 20rem;
+    margin: 2rem 0;
+}
+
+.container_login span {
+    text-decoration: underline;
+    color: rgb(206, 82, 90);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#alert {
+    color:rgb(206, 82, 90);
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    padding: 1rem;
+    width: 45rem;
+    margin: .2rem 0;
+    border: none;
+}
+
+label {
+    position: absolute;
+    left: -99rem;
+}
+
+.container_login p {
+    width: 45rem;
+}
+
+.container_login .button--disabled {
+    background-color: rgb(212, 212, 212);
+    color: rgba(9, 31, 69, .5);
+}
+
+/********************   WRITE POST  ********************/
+
+.post_writing {
+    margin: 2rem 0 1rem 0;
+    padding: 1rem 1.7rem;
+    color: white;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: rgba(33, 35, 38, 0.2) 0px 10px 10px -10px;
+}
+
+
+.profile_writing p {
+    color: rgb(9, 31, 69);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.post_writing_fields {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post_writing_fields img {
+    object-fit: cover;
+    width: 15rem;
+    height: 15rem;
+    padding: 0;
+    margin-right: 2rem;
+}
+
+.post_writing_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post_writing_button .button--disabled {
+    background-color: rgb(212, 212, 212);
+    color: rgba(9, 31, 69, 0.5);
+}
+
+.post_writing_button i {
+    color: rgb(9, 31, 69);
+    padding: .5rem;
+    font-size: 2.5rem;
+}
+
+/********************   EDIT PROFILE  ********************/
+
+.profile_editing {
+    margin: 2rem 0 2.5rem 0;
+    padding: 2rem 1.7rem;
+    color: white;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: rgba(33, 35, 38, 0.2) 0px 10px 10px -10px;
+}
+
+.profile_editing_fields {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile_editing_fields img {
+    object-fit: cover;
+    width: 10rem;
+    height: 10rem;
+    padding: 0;
+    border-radius: 5rem;
+    margin-right: 2rem;
+}
+
+.profile_editing p {
+    color: rgb(9, 31, 69);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.profile_editing_button {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.profile_editing_button button {
+    margin: 1.5rem 1.5rem 0 1.5rem;
+    padding: 1rem;
+    background-color: white;
+    color:rgb(9, 31, 69);
+    transition: .25s transform ease-in;
+}
+
+.profile_editing_button button:hover {
+    transform: scale(1.02);
+    border: .2rem solid rgba(253, 45, 1, 0.45);
+}
+
+.hidden {
+    display: none;
+}
+
+/********************   WRITE COMMENT  ********************/
+
+.comment_writing {
+    margin: 2rem 0 2.5rem 0;
+    padding: 2rem 0 2rem 1.7rem;
+    color: white;
+    border-radius: 1rem;
+    text-align: right;
+    box-shadow: rgba(33, 35, 38, 0.2) 0px 10px 10px -10px;
+}
+
+.comment_writing_button {
+    display: flex;
+    justify-content: end;
+    align-items: baseline;
+}
+
+.comment_writing .button--disabled {
+    background-color: rgb(212, 212, 212);
+    color: rgba(9, 31, 69, .5);
+}
+
+/********************   EDIT COMMENT  ********************/
+.comment_editing {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.comment_editing .button {
+    margin-right: .5rem;
+    padding: 1rem 1.5rem;
+}
+
+/********************   DISPLAY POST  ********************/
+.card_post {
+    margin: 1rem 0;
+    padding: 1rem 1.7rem;
+    background-color:rgba(240, 240, 240, .3);
+    border-radius: 1rem;
+    color: rgb(9, 31, 69);
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px;
+}
+
+.postClick:hover {
+    border: .2rem solid rgb(9, 31, 69);
+}
+
+.card_post_info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+}
+
+.card_post_info_user {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.card_post_info_user img {
+    object-fit: cover;
+    width: 4.5rem;
+    height: 4.5rem;
+    padding: 0;
+    border-radius: 3rem;
+}
+
+.card_post_info_user p {
+    margin: 0 .5rem 0 1.5rem;
+    font-size: 1.45rem;
+    font-weight: bold;
+    padding-bottom: 1.5rem;
+    cursor: pointer;
+}
+
+.card_post_info_user p:hover {
+    color: rgb(253, 45, 1);
+    transform: scale(1.1);
+}
+
+.card_post_info_user small {
+    margin: 0 .5rem;
+    padding-bottom: 1.5rem;
+}
+
+.card_post_body {
+    margin-left: 5rem;
+    display: flex;
+    align-items: center;
+}
+
+.card_post_body_img img {
+    object-fit: cover;
+    background-position: center;
+    width: 30rem;
+    height: 30rem;
+    padding: 0;
+    margin-left: 1rem;
+}
+
+.card_post_body_content {
+    text-align: justify;
+    padding: 1.5rem;
+    margin-left: 1rem;
+    width: 55rem;
+}
+
+.card_post_info .button {
+    margin-right: 1rem;
+}
+
+.card_post_rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1.5rem 0 1rem 0;
+}
+
+.card_post_rating_icon {
+    margin: 0 1.5rem;
+}
+
+.fa-thumbs-up {
+    color: rgb(9, 31, 69);
+    padding-right: .5rem;
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.fa-thumbs-up--disabled {
+    color: rgba(240, 240, 240, .5);
+    margin: 0 .5rem 0 0;
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.fa-thumbs-down {
+    color: rgb(9, 31, 69);
+    padding-right: .5rem;
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.fa-thumbs-down--disabled {
+    color: rgba(240, 240, 240, .5);
+    margin: 0 .5rem 0 0;
+    font-size: 2.5rem;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.fa-comments {
+    color: rgb(9, 31, 69);
+    padding-right: 1.5rem;
+    font-size: 2.5rem;
+}
+
+
+/********************   DISPLAY COMMENT  ********************/
+
+.card_comment {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    margin: .5rem 0 .5rem 5rem;
+    padding: 1rem 0 1rem 1rem;
+    border-radius: 1rem;
+}
+
+.card_comment_photo img {
+    object-fit: cover;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 3rem;
+    padding: 0;
+}
+
+.card_comment_body {
+    width: 80%;
+    text-align: left;
+    margin: 0 0 0 1rem;
+    padding: 1.2rem 2.5rem;
+    border-radius: .5rem;
+    background-color: rgba(255, 255, 255, .7);
+    display: flex;
+    flex-direction: column;
+}
+
+.card_comment_body_top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card_comment_body_top--user {
+    display: flex;
+    align-items: baseline;
+}
+
+.card_comment_body_top--button button {
+    font-size: 1.1rem;
+    margin-left: 1rem;
+}
+
+.card_comment_body_top--user p {
+    margin: 0 .5rem 1rem 0;
+    font-weight: bold;
+    font-size: 1.45rem;
+}
+
+.card_comment_body_content {
+    margin-top: 1rem;
+}
+
+/********************   DISPLAY PROFILE  ********************/
+
+.card_profile {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    box-shadow: rgba(33, 35, 38, 0.5) 0px 10px 10px -10px;
+    color: rgb(9, 31, 69);
+    text-align: left;
+    margin: .5rem 0 1.5rem 0;
+    padding: 1.5rem 1rem;
+    border-radius: 1rem;
+}
+
+.card_profile img {
+    object-fit: cover;
+    background-position: center;
+    width: 15rem;
+    height: 15rem;
+    border-radius: 10rem;
+    padding: 0;
+}
+
+.card_profile_info {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: .5rem 1rem .5rem 2.5rem;
+    font-size: 1.5rem;
+}
+
+.card_profile_info h1 {
+    margin: .5rem 0;
+    font-size: 2rem;
+}
+
+.card_profile_info p {
+    margin: .5rem 0;
+}
+
+.card_post_info_button button {
+    background-color:rgba(240, 240, 240, .5);
+    box-shadow: rgba(33, 35, 38, 0.5) 0 .1rem .1rem -.1rem;
+    padding: 1rem;
+}

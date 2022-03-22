@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Groupomania</title>
+</head>
+
+<body>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+
+    <!--    LOGIN VIEW  -->
+    <script type="text/x-template" id="login">
+        <div class="container_login">
+            <img src="./images/icon-above-font-removebg.png" alt="Groupomania logo">
+            <div>
+                <h1 v-if="mode == 'login'">Connexion</h1>
+                <h1 v-else>Inscription</h1>
+                <p v-if="mode == 'login'">Vous n'avez pas encore de compte ? <span @click="switchToCreateAccount()">Créer un compte</span></p>
+                <p v-else>Vous avez déjà un compte ? <span v-on:click="switchToLogin()">Se connecter</span></p>
+            </div>
+            <div class="form">
+                <!-- Email Field -->
+                <input type="email" placeholder="email" id="email" v-if="mode == 'create'" v-model="email">
+                <label for="email" v-if="mode == 'create'">Veuillez entrer votre email</label>
+                <!-- Username Field -->
+                <input type="text" placeholder="pseudo" id="username" v-model="username">
+                <label for="username">Veuillez entrer votre pseudo</label>
+                <!-- Password Field -->
+                <input type="password" placeholder="mot de passe" id="password" v-model="password">
+                <label for="password">Veuillez entrer votre mot de passe</label>
+                <button class="button" :class="{'button--disabled' : !createFields}" v-if="mode == 'login'" @click.prevent="loginAccount()">se connecter</button>
+                <button class="button" :class="{'button--disabled' : !createFields}" v-else @click.prevent="createAccount()">créer son compte</button>
+            </div>
+            <p id="alert">{{ messageToUser }}</p>
+        </div>
+    </script>
+
+    <!--   FORUM VIEW  -->
+    <script type="text/x-template" id="forum">
+        <div class="container">
+            <header>
+                <img src="./images/icon-left-font-monochrome-white.png" alt="Groupomania logo">
+                <nav>
+                    <ul>
+                        <li @click="showWriteMessage = !showWriteMessage">Ecrire un message</li>
+                        <li @click="goToProfile()">Mon profil</li>
+                        <li @click="logout()">Déconnexion</li>
+                    </ul>
+                </nav>
+            </header>
+            <main>
+                <!-- WRITE NEW POST -->
+                <section v-show="showWriteMessage">
+                    <article class="post_writing">
+                        <div class="post_writing_fields">
+                            <img src="" class="hidden" alt="Prévisualisation de l'image">
+                            <textarea placeholder="Ecrivez votre message" rows="3" cols="80" id="content" v-model="writePost"></textarea>
+                            <label for="content">Ecrivez votre message</label>
+                        </div>
+                        <p v-if="messageToUser != ''">{{ messageToUser }}</p>
+                        <div class="post_writing_button">
+                            <input type="file" name="image" accept="image/png, image/gif, image/jpeg" @change="previewFile()">
+                            <button class="button" :class="{'button--disabled' : !enablePost}" type="submit" @click.prevent="createPost()">Publier</button>
+                        </div>
+                    </article>
+                </section>
+                <!-- DISPLAY ALL POSTS -->
+                <section v-for="post in posts.slice().reverse()">
+                    <article class="card_post postClick" v-if="post.username != ''">
+                        <router-link :to="`/forum/${post.id}`">
+                        <div class="card_post_info">
+                            <div class="card_post_info_user">
+                                <img :src="post.userIMG" alt="photo profil">
+                                <p>{{ post.username }}</p>
+                                <small>{{ post.updatedAt }}</small>
+                            </div>
+                        </div>
+                        <div class="card_post_body">
+                            <div class="card_post_body_img" v-if="post.imgURL != null">
+                                <img :src="post.imgURL" alt="image publiée">
+                            </div>
+                            <div class="card_post_body_content">{{ post.content }}</div>
+                        </div>
+                        </router-link>
+                    </article>
+                </section>
+            </main>
+        </div>
+    </script>
+
+    <!--   POST VIEW  -->
+    <script type="text/x-template" id="post">
+        <div class="container">
+            <header>
+                <router-link to="/forum"><img src="./images/icon-left-font-monochrome-white.png" alt="Groupomani logo"></router-link>
+                <nav>
+                    <ul>
+                        <li @click="showWriteMessage = !showWriteMessage">Ecrire un message</li>
+                        <li @click="goToProfile()">Mon profil</li>
+                        <li @click="logout()">Déconnexion</li>
+                    </ul>
+                </nav>
+            </header>
+            <main>
+                <!-- V-SHOW WRITE NEW POST -->
+                <section v-show="showWriteMessage">
+                    <article class="post_writing">
+                        <div class="post_writing_fields">
+                            <img src="" class="hidden" alt="Prévisualisation de l'image">
+                            <textarea placeholder="Ecrivez votre message" rows="3" cols="80" id="content" v-model="writePost"></textarea>
+                            <label for="content">Ecrivez votre message</label>
+                        </div>
+                        <p v-if="messageToUser != ''">{{ messageToUser }}</p>
+                        <div class="post_writing_button">
+                            <input type="file" name="image" accept="image/png, image/gif, image/jpeg" @change="previewFile()">
+                            <button class="button" :class="{'button--disabled' : !enablePost}" type="submit" @click.prevent="createPost()">Publier</button>
+                        </div>
+                    </article>
+                </section>
+                <section>
+                    <!-- DISPLAY POST BLOCK -->
+                    <article class="card_post">
+                        <div class="card_post_info">
+                            <div class="card_post_info_user">
+                                <img :src="post.userIMG" alt="photo profil">
+                                <router-link :to="`/${post.username}`"><p>{{ post.username }}</p></router-link>
+                                <small>{{ post.updatedAt }}</small>
+                            </div>
+                            <div>
+                                <button v-if="role == 'postAuthor'" class="button" @click="showEditPost = !showEditPost">Editer</button>
+                                <button v-if="role == 'postAuthor' || role == 'superUser'" class="button" @click="deletePost()">Supprimer</button>
+                            </div>
+                        </div>
+                        <div class="card_post_body">
+                            <div class="card_post_body_img" v-if="post.imgURL != null">
+                                <img :src="post.imgURL" alt="image publiée">
+                            </div>
+                            <div class="card_post_body_content">{{ post.content }}</div>
+                        </div>
+                        <div class="card_post_rating">
+                            <div class="card_post_rating_icon">
+                                <i class="far fa-thumbs-up" :class="{'fa-thumbs-up--disabled':!enableLike}" @click="likePost()"></i>
+                                <span>{{ totalLikes }}</span>
+                            </div>
+                            <div class="card_post_rating_icon">
+                                <i class="far fa-thumbs-down" :class="{'fa-thumbs-down--disabled':!enableDislike}" @click="dislikePost()"></i>
+                                <span>{{ totalDislikes }}</span>
+                            </div>
+                            <div class="card_post_rating_icon">
+                                <i class="fas fa-comments"></i>
+                                <span v-if="totalComments <= 1">{{ totalComments }} commentaire</span>
+                                <span v-else>{{ totalComments }} commentaires</span>
+                            </div>
+                        </div>
+                    </article>
+                    <!-- V-IF EDIT MESSAGE BLOCK -->
+                    <article class="comment_writing" v-show="showEditPost"> 
+                        <div>
+                            <label for="message">Editer message</label>
+                            <textarea rows="3" cols="70" placeholder="Editer message" id="message" v-model="post.content"></textarea>
+                        </div>
+                        <div class="comment_writing_button">
+                            <button class="button" @click="modifyPost()" type="submit">Publier</button>
+                        </div>
+                    </article>
+                </section>
+                <!-- DISPLAY COMMENTS BLOCK -->
+                <section  v-for="comment in comments.slice().reverse()">
+                    <article class="card_comment" v-if="comment.username != ''">
+                        <div class="card_comment_photo"><img :src='comment.userIMG' alt="photo profil"/></div>
+                        <div class="card_comment_body">
+                            <div class="card_comment_body_top">
+                                <div class="card_comment_body_top--user">
+                                    <p>{{ comment.username}}</p>
+                                    <small>{{ comment.updatedAt }}</small>     
+                                </div>
+                                <div class="card_comment_body_top--button">
+                                    <button v-if="comment.role == 'commentAuthor'" class="button" @click="modifyComment()">Editer</button>
+                                    <button v-if="comment.role == 'commentAuthor' || comment.role == 'superUser'" class="button" @click="deleteComment(comment.id)">Supprimer</button>
+                                </div>
+                            </div>
+                            <div class="card_comment_body_content">{{ comment.content }}</div>
+                        </div>
+                    </article>
+                    <!-- V-IF EDIT COMMENT BLOCK-->
+                    <div class="comment_editing" v-if="status == 'toEdit' && comment.role == 'commentAuthor'">
+                        <button class="button" @click="confirmCommentChanges(comment.id)">Publier</button>
+                        <label for="message">Modifier commentaire</label>
+                        <textarea mode="toEdit" rows="3" cols="50" placeholder="Editer message" id="message" v-model="editComment"></textarea>
+                    </div>
+                </section>
+                <!-- WRITE NEW COMMENT BLOCK -->
+                <section class="comment_writing">
+                    <div>
+                        <textarea rows="3" cols="70" placeholder="Ajouter un commentaire" id="content" v-model="writeComment"></textarea>
+                        <label for="content">Ajouter un commentaire</label>
+                    </div>
+                    <div class="comment_writing_button">
+                        <button class="button" :class="{'button--disabled':!enableComment}" @click.prevent="createComment()">Publier</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </script>
+
+    <!--   PROFILE VIEW  -->
+    <script type="text/x-template" id="profile">
+        <div class="container">
+            <header>
+                <img src="./images/icon-left-font-monochrome-white.png" alt="Groupomani logo" @click="goToForum()">
+                <nav>
+                    <ul>
+                        <li v-if="role == 'profileUser' && user.imgURL != null" @click="showWriteMessage = !showWriteMessage">Ecrire un message</li>
+                        <li v-if="role == 'profileUser' || role == 'superUser'" @click.prevent="deleteAccount()">Supprimer profil</li>
+                        <li v-else @click="goToProfile()">Mon profil</li>
+                        <li @click="logout()">Déconnexion</li>
+                    </ul>
+                </nav>
+            </header>
+            <main>
+                <!-- USER PROFILE BLOCK -->
+                <section>
+                    <div class="card_profile">
+                        <img v-if="user.imgURL != null" :src="user.imgURL">
+                        <div class="card_profile_info">
+                            <h1>{{ user.username }}</h1>
+                            <p v-if="user.bio != 'null'">{{ user.bio }}</p>
+                        </div>
+                        <button v-if="role == 'profileUser'" class="button" @click="showEditProfile = !showEditProfile">Editer</button>
+                    </div>
+                </section>
+                <!-- EDIT PROFILE BLOCK -->
+                <section v-show="showEditProfile" class="profile_editing"> 
+                    <div class="profile_editing_fields">
+                        <img src="" class="hidden" alt="Prévisualisation de l'image">
+                        <label for="bio">Editer</label>
+                        <textarea placeholder="Editer" rows="3" cols="80" id="bio" v-model="user.bio"></textarea>
+                    </div>
+                    <p v-if="messageToUser != ''">{{ messageToUser }}</p>
+                    <div class="profile_editing_button">
+                        <input type="file" name="image" id="photo" accept="image/png, image/jpg, image/jpeg" @change="previewPicture()">
+                        <label for="photo">Veuillez choisir une photo profil</label>
+                        <button class="button" @click.prevent="modifyProfile()">Confirmer</button>
+                    </div>
+                </section>
+                <!-- WRITE NEW POST -->
+                <section v-show="showWriteMessage">
+                    <article class="post_writing">
+                        <div class="post_writing_fields">
+                            <img src="" class="hidden" alt="Prévisualisation de l'image">
+                            <textarea placeholder="Ecrivez votre message" rows="3" cols="80" id="content" v-model="writeContent"></textarea>
+                            <label for="content">Ecrivez votre message</label>
+                        </div>
+                        <p v-if="messageToUser != ''">{{ messageToUser }}</p>
+                        <div class="post_writing_button">
+                            <input type="file" name="image" accept="image/png, image/gif, image/jpeg" @change="previewFile()">
+                            <button class="button" :class="{'button--disabled' : !enablePost}" @click.prevent="createPost()">Publier</button>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- DISPLAY USER ALL POSTS -->
+                <section v-for="post in posts.slice().reverse()" v-bind:data-index="post.id">
+                    <article class="card_post postClick" v-if="post.username != ''">
+                        <router-link :to="`/forum/${post.id}`">
+                        <div class="card_post_info">
+                            <div class="card_post_info_user">
+                                <img :src="post.userIMG" alt="photo profil">
+                                <p>{{ post.username }}</p>
+                                <small>{{ post.updatedAt }}</small>
+                            </div>
+                        </div>
+                        <div class="card_post_body">
+                            <div class="card_post_body_img" v-if="post.imgURL != null">
+                                <img :src="post.imgURL" alt="image publiée">
+                            </div>
+                            <div class="card_post_body_content">{{ post.content }}</div>
+                        </div>
+                        </router-link>
+                    </article>
+                </section>
+            </main>
+        </div>
+    </script>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
